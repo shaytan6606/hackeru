@@ -1,9 +1,10 @@
 <?php
 
-class PagenotfoundController 
+class PagenotfoundController extends Controller
 {
     public function actionNotfound()
     {
-        return;
+        self::$renderName = 'notfound';
+        self::renderLayout();
     }
 }

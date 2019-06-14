@@ -23,14 +23,14 @@ class Router
 	public function run()
 	{
 		$uri = $this->getURI();
-		try{
+		// try{
 			//$isHit = false;
 			foreach ($this->routes as $uriPattern => $path) {
 			// try{
 				//echo $uriPattern . ' ' . $uri.'<br />';
 				if(preg_match("~$uriPattern~", $uri)) {
 					//$isHit = true;
-//die('sdsds');
+					//die('sdsds');
 					// Получаем внутренний путь из внешнего согласно правилу.
 
 					$internalRoute = preg_replace("~$uriPattern~", $path, $uri);
@@ -58,9 +58,11 @@ class Router
 					}
 
 					$controllerObject = new $controllerName;
-
+					try{
 					$result = call_user_func_array(array($controllerObject, $actionName), $parameters);
-				
+					} catch (Exception $e){
+						var_dump($e);
+					}
 					if ($result != null) {
 						//$isHit = false;
 						throw new Exception('action not found');
@@ -70,6 +72,19 @@ class Router
 					}
 					//return;
 				} 
+				// else {
+				// 	echo 'страница не найдена';
+				// 	// $controllerFile = ROOT . '/controllers/PagenotfoundController.php';
+					
+				// 	// if (file_exists($controllerFile)) {
+				// 	// 	include_once($controllerFile);
+				// 	// }
+				// 	// $parameters = [];
+				// 	// $actionName = 'actionNotfound';
+				// 	// $controllerObject = new PagenotfoundController();
+				// 	// $result = call_user_func_array(array($controllerObject, $actionName), $parameters);
+				// 	break;
+				// }
 					// throw new Exception('/404');
 				// }
 			// } catch (Exception $e){
@@ -85,11 +100,11 @@ class Router
 
 		}
 		//if (!$isHit)
-			throw new Exception('/404');
-	} catch (Exception $e){
-		// header("HTTP/1.0 404 Not Found");
-		echo 78787878778;
-		return;
-	}
+	// 		throw new Exception('/404');
+	// } catch (Exception $e){
+	// 	// header("HTTP/1.0 404 Not Found");
+	// 	echo 78787878778;
+	// 	return;
+	// }
 	}
 }

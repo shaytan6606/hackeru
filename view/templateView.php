@@ -3,13 +3,24 @@
  <head>
   <meta charset="utf-8" />
   <title>Приложение для пункта выдачи</title>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
+  <link rel="stylesheet" href="/style.css">
   <style>
-   article, aside, details, figcaption, figure, footer,header,
-   hgroup, menu, nav, section { display: block; }
+   li {display: inline;}
   </style>
  </head>
  <body>
+ <div>
+  <ul>
+    <li><a href="/orders/index">Заказы</a></li>
+    <li><a href="/orders/addorder">Добавить заказ</a></li>
+    <li><a href="/users/adduser">Добавить пользователя</a></li>
+    <li><a href="/users/logout">Выйти из системы</a></li>
+  </ul>
+ </div>
   <p>Шапка вьюхи</p>
 
     <!-- вьюха в зависимости от контроллера -->
@@ -19,5 +30,7 @@
     <!-- вьюха в зависимости от контроллера -->
 
   <p>Подвал вьюхи</p>
+  
+
  </body>
 </html>

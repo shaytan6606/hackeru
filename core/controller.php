@@ -6,6 +6,8 @@ abstract class Controller
 
     public static $renderData;
 
+    public static $pageName;
+
     public function renderLayout()
     {
         require_once(ROOT.'/view/templateView.php');

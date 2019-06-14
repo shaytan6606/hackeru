@@ -58,12 +58,6 @@ class Router
             $actionName = 'actionNotfound';
             
         }
-        // запускаем экшн
-        // try{
-        //     method_exists($directory,'read')
-        // } catch (Exception $e){
-        //     echo $e->getMessage();
-        // }
 
         $result = call_user_func_array(array($controllerObject, $actionName), $parameters);
     }

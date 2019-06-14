@@ -13,6 +13,7 @@ class OrdersController extends Controller
 
 	public function actionView($id)
 	{
+		self::$pageName = 'Заказ';
 		if(isset($_SESSION['privileges'])) {
 			// вывод 1 товара
 			$ordersItemModel = new Orders;
@@ -32,6 +33,7 @@ class OrdersController extends Controller
 
 	public function actionIndex($parameters = 0)
 	{
+		self::$pageName = 'Заказы';
 		if(isset($_SESSION['privileges'])) {
 			// вывод списка товаров
 			$ordersList = array();
@@ -52,7 +54,10 @@ class OrdersController extends Controller
 
 	public function actionAddorder()
 	{
+		self::$pageName = 'Добавление заказа';
 		if(isset($_SESSION['privileges'])) {
+			self::$renderName = 'addorder';
+			self::renderLayout(); 
 			if(isset($_POST['Submit'])){
 				// Получаем данные от  пользователя
 				$customerName = $_POST['customerName'];
@@ -61,9 +66,6 @@ class OrdersController extends Controller
 				$issue = $_POST['issue'];
 
 				self::$orders->addorder($customerName, $cost, $receiving, $issue);
-
-				self::$renderName = 'addorder';
-				self::renderLayout(); 
 				
 			}
 		} else {
@@ -76,9 +78,7 @@ class OrdersController extends Controller
 		if(isset($_SESSION['privileges'])) {
             if($_SESSION['privileges'] === '1'){
 				self::$orders->deleteorder($id);
-				var_dump($id);
-				echo 'dmdkdkdkd';
-				print_r($_POST);
+
 			} else { echo 'нет доступа';}
         } else { echo 'нет доступа';}
 	}

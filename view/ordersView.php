@@ -14,7 +14,7 @@ foreach(self::$renderData as $allOrders){
     foreach($allOrders as $order){
         echo '<th>' . $order . '</th>';
     }
-    echo '<th><p><a href="/deleteorder/'. $allOrders['id'] .'">Удалить</a></p></th>';
+    echo '<th><p><a href="/orders/deleteorder/'. $allOrders['id'] .'">Удалить</a></p></th>';
     echo '</tr>';
     // echo $allOrders['id'];
 }

@@ -3,6 +3,7 @@
 class UsersController extends Controller
 {
     public static $users;
+
     public function __construct(){
 
         $modelsName = array('model1'=>'users');
@@ -13,6 +14,7 @@ class UsersController extends Controller
 
     public function actionLogin()
     {
+        self::$pageName = 'Вход';
         // Подключение вьюхи
         self::$renderName = 'login';
         self::renderLayout(); 
@@ -27,6 +29,7 @@ class UsersController extends Controller
     }
     public function actionLogout()
     {
+        self::$pageName = 'Выход';
         // удаляем токен из бд
         self::$users->logout();
         // удаляем куки
@@ -38,6 +41,7 @@ class UsersController extends Controller
     }
     public function actionAdduser()
     {
+        self::$pageName = 'Добавление пользователя';
         if(isset($_SESSION['privileges'])) {
             if($_SESSION['privileges'] === '1'){
                 // подключение вьюхи

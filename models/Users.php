@@ -11,7 +11,7 @@ class Users extends Model
     public function login($login, $pass)
     {
         // получаем данные пользователя по логину
-        $sql = 'SELECT username, pass, id, privileges FROM orders.users WHERE username= :username ';
+        $sql = 'SELECT username, pass, salt, id, privileges FROM orders.users WHERE username= :username ';
         $result = self::$db->prepare($sql);
         $result->execute(array('username' => $login));
         $dataFromDataBase = $result->fetch();
@@ -19,7 +19,7 @@ class Users extends Model
         // сравниваем
         if($login === $dataFromDataBase['username']){
             echo ' login accepted';
-            if($pass === $dataFromDataBase['pass']){
+            if(md5($dataFromDataBase['salt'] . $pass) === $dataFromDataBase['pass']){
 
                 //успешная авторизация
 
@@ -64,16 +64,20 @@ class Users extends Model
 
     public function adduser($login, $email, $pass, $privileges)
     {
+        $salt = $this->getToken(10);
+        $pass = md5($salt . $pass);
 
-        $sql = "INSERT INTO `users` (`id`, `username`, `email`, `pass`, `privileges`) 
-        VALUES (:id, :username, :email, :pass, :privileges)";
+        $sql = "INSERT INTO `users` (`id`, `username`, `email`, `pass`, `salt`, `sessionid`, `token`, `privileges`) 
+                                VALUES (:id, :username, :email, :pass, :salt, '', '', :privileges);";
+
         $addUserToBase = self::$db->prepare($sql);
         $addUserToBase->execute(array('id' => NULL,
-                            'username' => $login,
-                            'email' => $email,
-                            'pass'=> $pass,
-                            'privileges' => $privileges));
-        
+                                    'username' => $login,
+                                    'email' => $email,
+                                    'pass' => $pass,
+                                    'salt' => $salt,
+                                    'privileges' => $privileges));
+                
     }
     private function getToken($length = 30) 
     {

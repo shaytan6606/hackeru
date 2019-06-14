@@ -18,21 +18,6 @@ require_once(ROOT.'/core/controller.php');
 // header("HTTP/1.0 404 Not Found");
 session_start();
 
-// if(isset($_COOKIE['token'])){
-
-//     $sql = 'SELECT username, pass, id, privileges FROM orders.users WHERE username= :username ';
-//     $result = self::$db->prepare($sql);
-//     $result->execute(array('username' => $login));
-//     $dataFromDataBase = $result->fetch();
-
-
-//     if($_COOKIE['token'] === ){
-//         echo 'ddd';
-//     }
-// } else {
-//     echo '<p><a href="/login">Войти</a></p>';
-// }
-
 
 $router = new Router();
 $router->run();

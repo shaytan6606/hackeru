@@ -53,22 +53,16 @@ class Orders extends Model
 // customerName cost receiving issue
 	public function addorder($customerName, $cost, $receiving, $issue) {
 
-	$sql = "INSERT INTO `orders` (`id`, `customerName`, `cost`, `receiving`, `issue`, `userid`) 
-	VALUES (:id, :customerName, :cost, :receiving, :issue, :userid)";
+		$sql = "INSERT INTO `orders` (`id`, `customerName`, `cost`, `receiving`, `issue`, `userid`) 
+		VALUES (:id, :customerName, :cost, :receiving, :issue, :userid)";
 
-	$addOrderToBase = self::$db->prepare($sql);
-	$addOrderToBase->execute(array('id' => NULL,
-						'customerName' => $customerName,
-						'cost' => $cost,
-						'receiving'=> $receiving,
-						'issue' => $issue,
-						'userid' => $_SESSION['id']));
-	
-    
-		var_dump($customerName);
-		var_dump($cost);
-		var_dump($receiving);
-		var_dump($issue);
+		$addOrderToBase = self::$db->prepare($sql);
+		$addOrderToBase->execute(array('id' => NULL,
+							'customerName' => $customerName,
+							'cost' => $cost,
+							'receiving'=> $receiving,
+							'issue' => $issue,
+							'userid' => $_SESSION['id']));
 
 	}
 	public function deleteorder($id){

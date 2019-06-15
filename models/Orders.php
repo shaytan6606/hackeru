@@ -57,12 +57,13 @@ class Orders extends Model
 		VALUES (:id, :customerName, :cost, :receiving, :issue, :userid)";
 
 		$addOrderToBase = self::$db->prepare($sql);
-		$addOrderToBase->execute(array('id' => NULL,
-							'customerName' => $customerName,
-							'cost' => $cost,
-							'receiving'=> $receiving,
-							'issue' => $issue,
-							'userid' => $_SESSION['id']));
+		$data = array('id' => NULL,
+					'customerName' => $customerName,
+					'cost' => $cost,
+					'receiving'=> $receiving,
+					'issue' => $issue,
+					'userid' => $_SESSION['id']);
+		$addOrderToBase->execute($data);
 
 	}
 	public function deleteorder($id){

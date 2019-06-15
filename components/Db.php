@@ -24,10 +24,14 @@ class Db
 		}
 		return self::$_instance = new self;
 	}
-	public function query($sql, $params = []) {
+	public function query($sql, $params = []) {// дописать метод
 		return $this->db->query($sql);
+	}
+	public function querySelect($sql){
+		
 	}
 	public function prepare($sql) {
 		return $this->db->prepare($sql);
 	}
+	
 }

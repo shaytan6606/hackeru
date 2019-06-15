@@ -3,13 +3,17 @@
 class UsersController extends Controller
 {
     public static $users;
-
+    protected $template_dir = 'users';
     public function __construct(){
 
-        $modelsName = array('model1'=>'users');
+        // $modelsName = array('model1'=>'users');
         
-        self::getModel($modelsName);
-        self::$users = new Users;
+        
+        // self::getModel($modelsName);
+        // self::$users = new Users;
+        $modelName = 'users';
+
+        self::$users = self::getModel($modelName);
     }
 
     public function actionLogin()
@@ -17,8 +21,9 @@ class UsersController extends Controller
         self::$pageName = 'Вход';
         // Подключение вьюхи
         self::$renderName = 'login';
-        self::renderLayout(); 
+        self::renderLayout('template', ['content'=>$this->render('login')]);
 
+        // if($_COOKIE['token'] ===)
         if(isset($_POST['Submit'])){
             // Получаем данные от  пользователя
             $login = $_POST['user'];
@@ -32,11 +37,7 @@ class UsersController extends Controller
         self::$pageName = 'Выход';
         // удаляем токен из бд
         self::$users->logout();
-        // удаляем куки
-        unset($_COOKIE['token']);
-        setcookie('token', null, -1, '/');
-        // убиваем сессию
-        $_SESSION = array();
+        
 
     }
     public function actionAdduser()
@@ -45,7 +46,7 @@ class UsersController extends Controller
         if(isset($_SESSION['privileges'])) {
             if($_SESSION['privileges'] === '1'){
                 // подключение вьюхи
-                self::$renderName = 'adduser';
+                self::$renderName = 'users/adduser';
                 self::renderLayout();
                 // Добавляем пользователя
 

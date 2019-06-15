@@ -21,7 +21,14 @@
   <ul>
     <li><a href="/orders/index">Заказы</a></li>
     <li><a href="/orders/addorder">Добавить заказ</a></li>
-    <li><a href="/users/adduser">Добавить пользователя</a></li>
+    <?php
+    if(isset($_SESSION['privileges'])){
+      if ($_SESSION['privileges'] === '1') {
+        echo '<li><a href="/users/adduser">Добавить пользователя</a></li>';
+      }
+    }
+    ?>
+    
     <li><a href="/users/logout">Выйти из системы</a></li>
   </ul>
  </div>
@@ -29,7 +36,7 @@
 
     <!-- вьюха в зависимости от контроллера -->
     <?php
-    self::render();
+    echo $data['content'] ?? 'не указан шаблон';
     ?>
     <!-- вьюха в зависимости от контроллера -->
 

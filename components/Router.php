@@ -2,109 +2,75 @@
 
 class Router
 {
+    private function getURI()
+    {
+        if (!empty($_SERVER['REQUEST_URI'])) {
+            return trim($_SERVER['REQUEST_URI'], '/');
+        }
+    }
+    public function run()
+    {
+        // получаем ссылку
+        $uri = $this->getURI();
 
-	private $routes;
-	public function __construct()
-	{
-		$routesPath = ROOT.'/config/routes.php';
-		$this->routes = include($routesPath);
-	}
+        // создаем массив из кусков адреса
+        $segments = explode('/', $uri);
 
-// Return type
+        // получаем  имя контроллера
+        $controllerName = array_shift($segments).'Controller';
+        $controllerName = ucfirst($controllerName);
 
-	private function getURI()
-	{
-		if (!empty($_SERVER['REQUEST_URI'])) {
-		return trim($_SERVER['REQUEST_URI'], '/');
-		}
-	
-	}
+        // получаем имя контроллера
+        $actionName = 'action'.ucfirst(array_shift($segments));
 
-	public function run()
-	{
-		$uri = $this->getURI();
-		// try{
-			//$isHit = false;
-			foreach ($this->routes as $uriPattern => $path) {
-			// try{
-				//echo $uriPattern . ' ' . $uri.'<br />';
-				if(preg_match("~$uriPattern~", $uri)) {
-					//$isHit = true;
-					//die('sdsds');
-					// Получаем внутренний путь из внешнего согласно правилу.
+        if(!isset($_SESSION['id'])){
+            $controllerName = 'UsersController';
+            $actionName = 'actionLogin';
+        }
+        // получаем параметры из ссылки
+        $parameters = $segments;
 
-					$internalRoute = preg_replace("~$uriPattern~", $path, $uri);
+        // подключаем файл контроллера
+        $controllerFile = ROOT . '/controllers/' .$controllerName. '.php';
+        try{
+            if (file_exists($controllerFile)) {
+                include_once($controllerFile);
+                $controllerObject = new $controllerName;
+                if(!method_exists($controllerObject,$actionName)){
+                    throw new Exception('Action not found');
+                }
+            } else {
+                
+                
+                throw new Exception('/404 страница не найдена');
+                
+            }
+        } catch (Exception $e) {
+            $controllerFile = ROOT . '/controllers/PagenotfoundController.php';
+            $controllerName = 'PagenotfoundController';
+            $actionName = 'actionNotfound';
+            include_once($controllerFile);
+            $controllerObject = new $controllerName;
+            // var_dump($e);
+            // $parameters = ['arg' => $e->getMessage()];
+            $_SESSION['err'] = $e->getMessage();
+            //$result = call_user_func_array(array($controllerObject, $actionName), $parameters);
+        }
 
-					$segments = explode('/', $internalRoute);
-
-					// print_r($segments);
-
-					$controllerName = array_shift($segments).'Controller';
-					$controllerName = ucfirst($controllerName);
-					// echo $controllerName;
-
-					$actionName = 'action'.ucfirst(array_shift($segments));
-
-					$parameters = $segments;
-
-					$controllerFile = ROOT . '/controllers/' .$controllerName. '.php';
-					// print_r($controllerFile);
-					
-					if (file_exists($controllerFile)) {
-						include_once($controllerFile);
-					} else {
-						//$isHit  = false;
-						throw new Exception('File controller not found');
-					}
-
-					$controllerObject = new $controllerName;
-					try{
-					$result = call_user_func_array(array($controllerObject, $actionName), $parameters);
-					} catch (Exception $e){
-						var_dump($e);
-					}
-					if ($result != null) {
-						//$isHit = false;
-						throw new Exception('action not found');
-						//break;
-					} else {
-						return;
-					}
-					//return;
-				} 
-				// else {
-				// 	echo 'страница не найдена';
-				// 	// $controllerFile = ROOT . '/controllers/PagenotfoundController.php';
-					
-				// 	// if (file_exists($controllerFile)) {
-				// 	// 	include_once($controllerFile);
-				// 	// }
-				// 	// $parameters = [];
-				// 	// $actionName = 'actionNotfound';
-				// 	// $controllerObject = new PagenotfoundController();
-				// 	// $result = call_user_func_array(array($controllerObject, $actionName), $parameters);
-				// 	break;
-				// }
-					// throw new Exception('/404');
-				// }
-			// } catch (Exception $e){
-			// 	echo $e->getMessage() . ' ';
-			// 	// include_once ROOT . '/controllers/PagenotfoundController.php';
-			// 	// if($_SERVER['REQUEST_URI'] != '/404'){
-			// 	// 	header("Location:/404");
-			// 	// }
-				
-			// 	break;
-			// 	// header("HTTP/1.0 404 Not Found");
-			// }
-
-		}
-		//if (!$isHit)
-	// 		throw new Exception('/404');
-	// } catch (Exception $e){
-	// 	// header("HTTP/1.0 404 Not Found");
-	// 	echo 78787878778;
-	// 	return;
-	// }
-	}
+        // Инициализируем контроллер
+        //$controllerObject = new $controllerName;
+        // var_dump(method_exists($controllerName,$actionName));
+/*
+        if(!method_exists($controllerObject,$actionName)){
+            $controllerFile = ROOT . '/controllers/PagenotfoundController.php';
+            include_once($controllerFile);
+            $controllerName = 'PagenotfoundController';
+            $controllerObject = new $controllerName;
+            $actionName = 'actionNotfound';
+            
+        }
+*/
+        $result = call_user_func_array(array($controllerObject, $actionName), $parameters);
+    }
 }
+

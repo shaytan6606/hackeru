@@ -3,12 +3,16 @@
 class OrdersController extends Controller
 {	
 	public static $orders;
+	protected $template_dir = 'orders';
 	public function __construct()
 	{
 		// подключение модели
-		$modelsName = array('model1'=>'orders');
-		self::getModel($modelsName);
-		self::$orders = new Orders;
+		// $modelsName = array('model1'=>'orders');
+		// self::getModel($modelsName);
+		// self::$orders = new Orders;
+		$modelName = 'orders';
+
+        self::$orders = self::getModel($modelName);
 	}
 
 	public function actionView($id)
@@ -23,7 +27,7 @@ class OrdersController extends Controller
 			}
 			// Подключение вьюхи
 			self::$renderName = 'order';
-			self::renderLayout();
+			self::renderLayout('template', ['content'=>$this->render('addorders')]); 
 		} else {
 			echo 'нет доступа';
 		}
@@ -44,8 +48,7 @@ class OrdersController extends Controller
 
 			self::$renderData = $ordersList;
 			self::$renderName = 'orders';
-			self::renderLayout(); 
-			// self::$renderData = $ordersList;
+			self::renderLayout('template', ['content'=>$this->render('addorders')]);
 		} else {
 			echo 'нет доступа';
 		}
@@ -57,7 +60,7 @@ class OrdersController extends Controller
 		self::$pageName = 'Добавление заказа';
 		if(isset($_SESSION['privileges'])) {
 			self::$renderName = 'addorder';
-			self::renderLayout(); 
+			self::renderLayout('template', ['content'=>$this->render('addorders')]);
 			if(isset($_POST['Submit'])){
 				// Получаем данные от  пользователя
 				$customerName = $_POST['customerName'];

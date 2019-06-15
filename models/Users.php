@@ -17,7 +17,7 @@ class Users extends Model
         $dataFromDataBase = $result->fetch();
 
         // сравниваем
-        if($login === $dataFromDataBase['username']){
+        if($dataFromDataBase['username']){
             echo ' login accepted';
             if(md5($dataFromDataBase['salt'] . $pass) === $dataFromDataBase['pass']){
 
@@ -53,11 +53,17 @@ class Users extends Model
 
     public function logout()
     {
-        if(isset($_COOKIE['token'])){$token = $_COOKIE['token'];
-        $sql = "UPDATE `users` SET `token` = '' WHERE `users`.`token` = :token";
-        $setTokenToBase = self::$db->prepare($sql);
-        $setTokenToBase->execute(array('token' => $token));
+        if(isset($_COOKIE['token'])){
+            $token = $_COOKIE['token'];
+            $sql = "UPDATE `users` SET `token` = '' WHERE `users`.`token` = :token";
+            $setTokenToBase = self::$db->prepare($sql);
+            $setTokenToBase->execute(array('token' => $token));
         }
+        // удаляем куки
+        unset($_COOKIE['token']);
+        setcookie('token', null, -1, '/');
+        // убиваем сессию
+        $_SESSION = array();
         
         echo 'вы вышли из системы';
     }
@@ -85,7 +91,7 @@ class Users extends Model
         $string = '';
     
         for ($i = 0; $i < $length; $i++) {
-            $string .= $characters[mt_rand(0, strlen($characters) - 1)];
+            $string .= $characters[random_int(0, strlen($characters) - 1)];
         }
     
         return $string;
